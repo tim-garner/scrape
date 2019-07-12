@@ -1,0 +1,23 @@
+body {
+font-family: Georgia, 'Times New Roman', Times, serif;
+} 
+
+* {
+    box-sizing: border-box;
+  }
+  
+  
+  .column {
+    float: left;
+    width: 25%;
+    padding: 10px;
+    height: 300px; 
+    column-rule: 1px solid red;
+  }
+  
+  
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
