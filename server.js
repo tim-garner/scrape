@@ -3,13 +3,17 @@ var express = require("express");
 
 var axios = require("axios");
 var cheerio = require("cheerio");
+// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+// mongoose.connect(MONGODB_URI);
 
 
-var app = express();
+
 
 // // Database configuration
 // var databaseUrl = "scraper";
 // var collections = ["scraper"];
+// var app = express();
 
 
 console.log("\n******************************************\n" +
@@ -40,3 +44,6 @@ console.log("\n******************************************\n" +
 
               console.log(results);
             });
+
+
+
