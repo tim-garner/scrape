@@ -12,7 +12,7 @@ font-family: Georgia, 'Times New Roman', Times, serif;
     width: 25%;
     padding: 10px;
     height: 300px; 
-    column-rule: 1px solid red;
+    column-rule: 1px solid black;
   }
   
   
@@ -20,4 +20,15 @@ font-family: Georgia, 'Times New Roman', Times, serif;
     content: "";
     display: table;
     clear: both;
+  }
+
+  .jumbotron {
+      text-align: center;
+      background: url(paper.jpg);
+  }
+
+  .container {
+      box-sizing: content-box;
+      background: whitesmoke;
+    
   }
