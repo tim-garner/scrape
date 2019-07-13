@@ -38,12 +38,13 @@ console.log("\n******************************************\n" +
                 // Make an object with data we scraped for this h4 and push it to the results array
                 results.push({
                   title: title,
-                  link: link
+                  link: link,
+                
                 });
               });
 
               console.log(results);
             });
 
-
+ 
 
