@@ -12,25 +12,31 @@ var app = express();
 // var collections = ["scraper"];
 
 
-axios.get("https://old.reddit.com/r/webdev/").then(function(response) {
+console.log("\n******************************************\n" +
+            "Grabbing every article headline and link\n" +
+            "from the website:" +
+            "\n******************************************\n");
 
- 
-  var $ = cheerio.load(response.data);
+            axios.get("https://www.nhl.com/").then(function(response) {
 
- 
-  var results = [];
-  $("p.title").each(function(i, element) {
+              var $ = cheerio.load(response.data);
+            
 
+              var results = [];
 
-    var title = $(element).text();
-    var link = $(element).children().attr("href");
+              $("h4.headline-link").each(function(i, element) {
+            
+                // Save the text of the h4-tag as "title"
+                var title = $(element).text();
 
-    results.push({
-      title: title,
-      link: link
-    });
-  });
+                var link = $(element).parent().attr("href");
+            
+                // Make an object with data we scraped for this h4 and push it to the results array
+                results.push({
+                  title: title,
+                  link: link
+                });
+              });
 
- 
-  console.log(results);
-});
+              console.log(results);
+            });
