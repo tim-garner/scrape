@@ -1,50 +1,131 @@
 var express = require("express");
-// var mongojs = require("mongojs");
+var logger = require("morgan");
+var mongoose = require("mongoose");
 
 var axios = require("axios");
 var cheerio = require("cheerio");
-// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
-// mongoose.connect(MONGODB_URI);
-
-
+mongoose.connect(MONGODB_URI);
 
 
-// // Database configuration
-// var databaseUrl = "scraper";
-// var collections = ["scraper"];
-// var app = express();
+var db = require("./models");
 
+var PORT = 3000;
+
+var app = express()
+;
+
+app.use(logger("dev"));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(express.static("public"));
 
 console.log("\n******************************************\n" +
             "Grabbing every article headline and link\n" +
             "from the website:" +
             "\n******************************************\n");
 
+            axios.get("/scrape", function(req, res){
+
+            
+
             axios.get("https://www.nhl.com/").then(function(response) {
 
               var $ = cheerio.load(response.data);
             
 
-              var results = [];
+              
 
-              $("h4.headline-link").each(function(i, element) {
-            
-                // Save the text of the h4-tag as "title"
-                var title = $(element).text();
+              $("article h2").each(function(i, element) {
 
-                var link = $(element).parent().attr("href");
+                var result = {};
             
-                // Make an object with data we scraped for this h4 and push it to the results array
+                result.titletitle = $(this)
+                .children("a")
+                .text("href");
+
+                result.linklink = $(this)
+                .children("a")
+                .attr("href");
+            
+     
                 results.push({
                   title: title,
                   link: link,
                 
+      
                 });
               });
 
               console.log(results);
             });
 
+            db.Article.create(result)
+            .then(function(dbArticle) {
+      
+              console.log(dbArticle);
+            })
+            .catch(function(err) {
+   
+              console.log(err);
+            });
+            res.send("Scrape Complete");
+        });
+    
+
+       
  
+
+
+app.get("/articles", function(req, res) {
+
+  db.Article.find({})
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      
+      res.json(err);
+    });
+});
+
+
+app.get("/articles/:id", function(req, res) {
+
+  db.Article.findOne({ _id: req.params.id })
+    .populate("note")
+    .then(function(dbArticle) {
+  
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+
+      res.json(err);
+    });
+});
+
+
+app.post("/articles/:id", function(req, res) {
+  db.Note.create(req.body)
+    .then(function(dbNote) {
+  
+      return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+    })
+    .then(function(dbArticle) {
+  
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+
+      res.json(err);
+    });
+});
+
+
+app.listen(PORT, function() {
+  console.log("App running on port " + PORT + "!");
+});
 
