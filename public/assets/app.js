@@ -1,13 +1,12 @@
-$.getJSON("/all", function(data) {
-
-  displayResults(data);
-});
 
 $.getJSON("/articles", function(data) {
 
   for (var i = 0; i < data.length; i++) {
     $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
   }
+});
+$.getJSON("/articles", function (data){
+  displayResults(data);
 });
 
 
@@ -70,4 +69,6 @@ $(document).on("click", "#savenote", function() {
 
   $("#titleinput").val("");
   $("#bodyinput").val("");
+  $("#urlinput").val("");
+  $("#summaryinput").val("");
 });

@@ -7,7 +7,10 @@ var NoteSchema = new Schema({
 
   title: String,
 
-  body: String
+  body: String,
+
+  url: String,
+  summary: String,
 });
 
 
