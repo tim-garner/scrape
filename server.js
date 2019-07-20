@@ -110,6 +110,59 @@ app.post("/articles/:id", function(req, res) {
     });
 });
 
+db.Note.create({ name: "cnn" })
+  .then(function(dbUser) {
+    console.log(dbUser);
+  })
+  .catch(function(err) {
+    console.log(err.message);
+  });
+
+
+
+app.get("/notes", function(req, res) {
+  // Find all Notes
+  db.Note.find({})
+    .then(function(dbNote) {
+      // If all Notes are successfully found, send them back to the client
+      res.json(dbNote);
+    })
+    .catch(function(err) {
+      // If an error occurs, send the error back to the client
+      res.json(err);
+    });
+});
+
+app.post("/submit", function(req, res) {
+  // Create a new Note in the db
+  db.Note.create(req.body)
+    .then(function(dbNote) {
+      // If a Note was created successfully, find one User (there's only one) and push the new Note's _id to the User's `notes` array
+      // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
+      // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+      return db.User.findOneAndUpdate({}, { $push: { notes: dbNote._id } }, { new: true });
+    })
+    .then(function(dbUser) {
+      // If the User was updated successfully, send it back to the client
+      res.json(dbUser);
+    })
+    .catch(function(err) {
+      // If an error occurs, send it back to the client
+      res.json(err);
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");
